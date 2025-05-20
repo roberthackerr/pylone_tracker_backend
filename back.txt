@@ -1,0 +1,18 @@
+```java
+@Autowired
+private UserRepository userRepository;
+
+@Autowired
+private RoleRepository roleRepository;
+
+@PostMapping("/users/{userId}/roles/{roleName}")
+public ResponseEntity<String> assignRoleToUser(@PathVariable Integer userId, @PathVariable String roleName) {
+    User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    Role role = roleRepository.findByName(roleName).orElseThrow(() -> new RuntimeException("Role not found"));
+
+    user.getRoles().add(role);
+    userRepository.save(user);
+
+    return ResponseEntity.ok("Role assigned successfully");
+}
+```
